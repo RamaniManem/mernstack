@@ -1,0 +1,52 @@
+body{
+    font-family: Verdana, sans-serif;
+    background-color: #eef2f7;
+}
+
+.box{
+    width: 80%;
+    margin: 30px auto;
+    text-align: center;
+}
+
+h1{
+    color: #333;
+}
+
+input{
+    padding: 10px;
+    margin: 8px;
+    width: 200px;
+}
+
+button{
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+table{
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td{
+    border: 1px solid #ccc;
+    padding: 12px;
+}
+
+th{
+    background-color: #444;
+    color: white;
+}
+
+.low-stock{
+    color: red;
+    font-weight: bold;
+}
+
+.in-stock{
+    color: green;
+    font-weight: bold;
+}
