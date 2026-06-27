@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Portfolio Test</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background:#f4f4f4;
+            padding:40px;
+        }
+
+        .container{
+            max-width:700px;
+            margin:auto;
+            background:white;
+            padding:25px;
+            border-radius:10px;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin:8px 0;
+        }
+
+        button{
+            padding:10px 20px;
+            cursor:pointer;
+            background:#2196F3;
+            color:white;
+            border:none;
+            border-radius:5px;
+        }
+
+        table{
+            width:100%;
+            margin-top:25px;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:10px;
+            text-align:left;
+        }
+
+        th{
+            background:#2196F3;
+            color:white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Student Portfolio Backend Demo</h2>
+
+<input id="name" placeholder="Name">
+
+<input id="email" placeholder="Email">
+
+<input id="department" placeholder="Department">
+
+<input id="rollNo" placeholder="Roll No">
+
+<input id="phone" placeholder="Phone">
+
+<input id="year" type="number" placeholder="Year">
+
+<input id="cgpa" type="number" step="0.1" placeholder="CGPA">
+
+<button onclick="addStudent()">
+Add Student
+</button>
+
+<hr>
+
+<button onclick="loadStudents()">
+Load Students
+</button>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Department</th>
+
+<th>CGPA</th>
+
+</tr>
+
+</thead>
+
+<tbody id="studentsTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+
+
+async function addStudent() {
+
+    const student = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        department: document.getElementById("department").value,
+        rollNo: document.getElementById("rollNo").value,
+        phone: document.getElementById("phone").value,
+        year: Number(document.getElementById("year").value),
+        cgpa: Number(document.getElementById("cgpa").value)
+    };
+
+    try {
+
+        const response = await fetch("/api/students", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(student)
+        });
+
+        if (!response.ok) {
+            throw new Error("Server returned " + response.status);
+        }
+
+        const result = await response.json();
+
+        console.log(result);
+
+        alert(result.message);
+
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("department").value = "";
+        document.getElementById("cgpa").value = "";
+
+        loadStudents();
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Error: " + err.message);
+
+    }
+
+}
+
+async function loadStudents() {
+
+    try {
+
+        const response = await fetch("/api/students");
+
+        if (!response.ok) {
+            throw new Error("Cannot load students");
+        }
+
+        const data = await response.json();
+
+        const table = document.getElementById("studentsTable");
+
+        table.innerHTML = "";
+
+        if (data.length === 0) {
+
+            table.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align:center;">
+                    No Students Found
+                </td>
+            </tr>`;
+            return;
+        }
+
+        data.forEach(student => {
+
+            table.innerHTML += `
+                <tr>
+                    <td>${student.name}</td>
+                    <td>${student.email}</td>
+                    <td>${student.department}</td>
+                    <td>${student.cgpa}</td>
+                </tr>
+            `;
+
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert(err.message);
+
+    }
+
+}
+
+loadStudents();
+
+
+</script>
+
+</body>
+</html>
